@@ -5,11 +5,11 @@
 // Constantes du jeu
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
-#define GRAVITY 800.0f // Réduire la gravité pour une chute plus douce
+#define GRAVITY 900.0f // Réduire la gravité pour une chute plus douce
 #define JUMP_VELOCITY -300.0f // Augmenter la vitesse de saut
-#define PIPE_SPEED 200.0f // pixels/s
+#define PIPE_SPEED 180.0f // pixels/s
 #define PIPE_SPACING 300 // Distance entre tuyaux
-#define PIPE_GAP 150 // Taille de l'ouverture entre tuyaux
+#define PIPE_GAP 170 // Taille de l'ouverture entre tuyaux
 #define GROUND_HEIGHT 60 // Hauteur du sol
 
 // États du jeu
