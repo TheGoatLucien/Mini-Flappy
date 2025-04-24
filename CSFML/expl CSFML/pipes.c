@@ -29,7 +29,7 @@ void update_pipes(Pipe* pipes, int count, float delta_time, Player* player, int*
         pipes[i].x_position -= PIPE_SPEED * delta_time;
 
         // Repositionner si le tuyau sort de l'écran
-        if (pipes[i].x_position < -sfTexture_getSize(sfSprite_getTexture(pipes[i].top_sprite)).x) {
+        if (pipes[i].x_position < -(int)sfTexture_getSize(sfSprite_getTexture(pipes[i].top_sprite)).x) {
             pipes[i].x_position += count * PIPE_SPACING;
             pipes[i].gap_y = (rand() % (WINDOW_HEIGHT - GROUND_HEIGHT - PIPE_GAP - 200)) + 100;
             pipes[i].passed = sfFalse;
