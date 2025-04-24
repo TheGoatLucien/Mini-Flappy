@@ -29,7 +29,7 @@ void draw_menu(sfRenderWindow* window, sfText* text) {
     sfText_setString(text, "Press ENTER to start");
     sfText_setCharacterSize(text, 40);
     sfText_setPosition(text, (sfVector2f) { WINDOW_WIDTH / 2 - 150, WINDOW_HEIGHT / 2 - 20 });
-    sfText_setColor(text, sfWhite);
+    sfText_setColor(text, sfBlack);
     sfRenderWindow_drawText(window, text, NULL);
 }
 
@@ -39,7 +39,7 @@ void draw_game_over(sfRenderWindow* window, sfText* text, int score) {
     sfText_setString(text, game_over_str);
     sfText_setCharacterSize(text, 40);
     sfText_setPosition(text, (sfVector2f) { WINDOW_WIDTH / 2 - 200, WINDOW_HEIGHT / 2 - 40 });
-    sfText_setColor(text, sfWhite);
+    sfText_setColor(text, sfBlack);
     sfRenderWindow_drawText(window, text, NULL);
 }
 

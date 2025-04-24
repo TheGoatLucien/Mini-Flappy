@@ -10,10 +10,14 @@ void init_game(Game* game, sfRenderWindow* window) {
     if (!game->player) exit(1);
 
     // Charger les textures
-    sfTexture* player_texture = sfTexture_createFromFile("assets/bird.png", NULL);
-    sfTexture* pipe_texture = sfTexture_createFromFile("assets/pipe.png", NULL);
-    sfTexture* bg_texture = sfTexture_createFromFile("assets/background.png", NULL);
-    sfTexture* ground_texture = sfTexture_createFromFile("assets/ground.png", NULL);
+    sfTexture* player_texture = sfTexture_createFromFile("../Ressources/Textures/Bird.png", NULL);
+    sfTexture* pipe_texture = sfTexture_createFromFile("../Ressources/Textures/Pipe.png", NULL);
+    sfTexture* bg_texture = sfTexture_createFromFile("../Ressources/Textures/Background5.png", NULL);
+    sfTexture* ground_texture = sfTexture_createFromFile("../Ressources/Textures/ground.png", NULL);
+	//scale les textures
+    
+	
+
 
     // Initialiser le joueur
     init_player(game->player, player_texture);
@@ -27,28 +31,31 @@ void init_game(Game* game, sfRenderWindow* window) {
     // Initialiser les sprites de fond et de sol
     game->background = sfSprite_create();
     sfSprite_setTexture(game->background, bg_texture, sfTrue);
+    sfSprite_setScale(game->background, (sfVector2f) { 3.125f, 2.34375f }); // Échelle pour le fond
+
     game->ground = sfSprite_create();
     sfSprite_setTexture(game->ground, ground_texture, sfTrue);
+    sfSprite_setScale(game->ground, (sfVector2f) { 12.5f, 1.935f }); // Échelle pour le sol
     sfSprite_setPosition(game->ground, (sfVector2f) { 0, WINDOW_HEIGHT - GROUND_HEIGHT });
 
     // Initialiser la police et le texte du score
-    game->font = sfFont_createFromFile("assets/font.ttf");
+    game->font = sfFont_createFromFile("../Ressources/Fonts/Bestime.ttf");
     game->score_text = sfText_create();
     sfText_setFont(game->score_text, game->font);
     sfText_setCharacterSize(game->score_text, 40);
     sfText_setPosition(game->score_text, (sfVector2f) { WINDOW_WIDTH / 2, 50 });
-    sfText_setColor(game->score_text, sfWhite);
+    sfText_setColor(game->score_text, sfBlack);
 
     // Initialiser l'état du jeu
     game->state = MENU;
     game->score = 0;
 }
 
-void update_game(Game* game, float delta_time) {
+void update_game(Game* game, float delta_time, sfBool jump) {
     if (game->state != PLAYING) return;
 
     // Mettre à jour le joueur (saut géré par input.c)
-    sfBool jump = sfFalse; // Modifié par handle_input
+ 
     update_player(game->player, delta_time, jump);
 
     // Mettre à jour les tuyaux et le score

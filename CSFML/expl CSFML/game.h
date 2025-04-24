@@ -5,12 +5,12 @@
 // Constantes du jeu
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
-#define GRAVITY 900.0f // pixels/s²
-#define JUMP_VELOCITY -350.0f // pixels/s
+#define GRAVITY 800.0f // Réduire la gravité pour une chute plus douce
+#define JUMP_VELOCITY -300.0f // Augmenter la vitesse de saut
 #define PIPE_SPEED 200.0f // pixels/s
 #define PIPE_SPACING 300 // Distance entre tuyaux
 #define PIPE_GAP 150 // Taille de l'ouverture entre tuyaux
-#define GROUND_HEIGHT 100 // Hauteur du sol
+#define GROUND_HEIGHT 60 // Hauteur du sol
 
 // États du jeu
 typedef enum {
@@ -50,6 +50,6 @@ typedef struct {
 
 // Prototypes des fonctions (définies dans game.c)
 void init_game(Game* game, sfRenderWindow* window);
-void update_game(Game* game, float delta_time);
+void update_game(Game* game, float delta_time, sfBool jump);
 void reset_game(Game* game);
 

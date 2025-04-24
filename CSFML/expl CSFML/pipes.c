@@ -8,17 +8,16 @@ void init_pipes(Pipe* pipes, int count, sfTexture* texture) {
         pipes[i].bottom_sprite = sfSprite_create();
         sfSprite_setTexture(pipes[i].top_sprite, texture, sfTrue);
         sfSprite_setTexture(pipes[i].bottom_sprite, texture, sfTrue);
-
+        sfSprite_setScale(pipes[i].top_sprite, (sfVector2f) { 1.5625f, 3.846f }); // Échelle pour les tuyaux
+        sfSprite_setScale(pipes[i].bottom_sprite, (sfVector2f) { 1.5625f, 3.846f });
         // Position initiale (tuyaux espacés à droite de l'écran)
         pipes[i].x_position = WINDOW_WIDTH + i * PIPE_SPACING;
-
         // Position aléatoire de l'ouverture
         pipes[i].gap_y = (rand() % (WINDOW_HEIGHT - GROUND_HEIGHT - PIPE_GAP - 200)) + 100;
 
         // Positionner les sprites
-        sfSprite_setPosition(pipes[i].top_sprite, (sfVector2f) { pipes[i].x_position, pipes[i].gap_y - PIPE_GAP / 2.0f - sfTexture_getSize(texture).y });
+        sfSprite_setPosition(pipes[i].top_sprite, (sfVector2f) { pipes[i].x_position, pipes[i].gap_y - PIPE_GAP / 2.0f - sfTexture_getSize(texture).y * 3.846f });
         sfSprite_setPosition(pipes[i].bottom_sprite, (sfVector2f) { pipes[i].x_position, pipes[i].gap_y + PIPE_GAP / 2.0f });
-
         pipes[i].passed = sfFalse;
     }
 }
@@ -36,7 +35,7 @@ void update_pipes(Pipe* pipes, int count, float delta_time, Player* player, int*
         }
 
         // Mettre à jour les positions des sprites
-        sfSprite_setPosition(pipes[i].top_sprite, (sfVector2f) { pipes[i].x_position, pipes[i].gap_y - PIPE_GAP / 2.0f - sfTexture_getSize(sfSprite_getTexture(pipes[i].top_sprite)).y });
+        sfSprite_setPosition(pipes[i].top_sprite, (sfVector2f) { pipes[i].x_position, pipes[i].gap_y - PIPE_GAP / 2.0f - sfTexture_getSize(sfSprite_getTexture(pipes[i].top_sprite)).y * 3.846f });
         sfSprite_setPosition(pipes[i].bottom_sprite, (sfVector2f) { pipes[i].x_position, pipes[i].gap_y + PIPE_GAP / 2.0f });
 
         // Incrémenter le score si le joueur passe le tuyau

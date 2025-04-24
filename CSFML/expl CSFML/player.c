@@ -5,13 +5,14 @@ void init_player(Player* player, sfTexture* texture) {
     // Initialiser le sprite du joueur
     player->sprite = sfSprite_create();
     sfSprite_setTexture(player->sprite, texture, sfTrue);
+    sfSprite_setScale(player->sprite, (sfVector2f) { 2.5f, 2.5f }); // Échelle pour l'oiseau
 
     // Centrer l'origine du sprite pour une rotation fluide (optionnel)
     sfVector2u texture_size = sfTexture_getSize(texture);
     sfSprite_setOrigin(player->sprite, (sfVector2f) { texture_size.x / 2.0f, texture_size.y / 2.0f });
 
     // Position initiale (gauche de l'écran, milieu vertical)
-    player->position = (sfVector2f){ WINDOW_WIDTH / 4.0f, WINDOW_HEIGHT / 2.0f };
+    player->position = (sfVector2f){ WINDOW_WIDTH / 4.0f, WINDOW_HEIGHT / 3.0f };
     sfSprite_setPosition(player->sprite, player->position);
 
     // Vitesse initiale
@@ -21,7 +22,12 @@ void init_player(Player* player, sfTexture* texture) {
 void update_player(Player* player, float delta_time, sfBool jump) {
     // Appliquer un saut si demandé
     if (jump) {
-        player->velocity = JUMP_VELOCITY;
+        if (player->velocity > 0) { // Si l'oiseau tombe, donner un boost plus fort
+            player->velocity = JUMP_VELOCITY;
+        }
+        else {
+            player->velocity = JUMP_VELOCITY; // Sinon, saut normal
+        }
     }
 
     // Appliquer la gravité
@@ -54,7 +60,7 @@ void draw_player(sfRenderWindow* window, Player* player) {
 
 void reset_player(Player* player) {
     // Réinitialiser la position et la vitesse
-    player->position = (sfVector2f){ WINDOW_WIDTH / 4.0f, WINDOW_HEIGHT / 2.0f };
+    player->position = (sfVector2f){ WINDOW_WIDTH / 4.0f, WINDOW_HEIGHT / 3.0f };
     player->velocity = 0.0f;
     sfSprite_setPosition(player->sprite, player->position);
     sfSprite_setRotation(player->sprite, 0.0f);

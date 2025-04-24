@@ -1,5 +1,6 @@
 #include "input.h"
 #include <SFML/Graphics.h>
+#include <stdio.h>
 
 void handle_input(sfRenderWindow* window, Game* game, sfBool* jump) {
     sfEvent event;
@@ -10,6 +11,7 @@ void handle_input(sfRenderWindow* window, Game* game, sfBool* jump) {
         if (event.type == sfEvtKeyPressed) {
             if (event.key.code == sfKeySpace) {
                 *jump = sfTrue; // Signal pour le saut du joueur
+                printf("Jump triggered!\n"); // Débogage
             }
         }
     }

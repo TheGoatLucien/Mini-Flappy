@@ -38,7 +38,7 @@ int main() {
         case PLAYING:
             jump = sfFalse; // Réinitialiser le saut
             handle_input(window, &game, &jump);
-            update_game(&game, delta_time);
+            update_game(&game, delta_time,jump);
             break;
         case GAME_OVER:
             handle_game_over_input(window, &game);
