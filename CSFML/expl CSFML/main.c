@@ -53,7 +53,7 @@ int main() {
 
         sfRenderWindow_clear(window, sfBlack);
 
-        draw_background(window, game.background);
+        draw_background(window, game.current_background, game.next_background, game.transition_timer);
         if (game.state == PLAYING || game.state == GAME_OVER) {
             draw_pipes(window, game.pipes, game.pipe_count);
             draw_player(window, game.player);

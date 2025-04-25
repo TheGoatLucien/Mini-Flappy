@@ -37,7 +37,7 @@ void update_pipes(Pipe* pipes, int count, float delta_time, Player* player, int*
 
         if (pipes[i].x_position < -(float)sfTexture_getSize(sfSprite_getTexture(pipes[i].top_sprite)).x) {
             pipes[i].x_position = max_x + PIPE_SPACING;
-            printf("Pipe %d repositioned to: %f\n", i, pipes[i].x_position);
+          
             pipes[i].gap_y = (rand() % (380 - 220 + 1)) + 220;
             pipes[i].passed = sfFalse;
             max_x = pipes[i].x_position;

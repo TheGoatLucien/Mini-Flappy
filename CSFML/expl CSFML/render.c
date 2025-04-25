@@ -6,8 +6,20 @@ void init_render(Game* game) {
     sfText_setString(game->score_text, "0");
 }
 
-void draw_background(sfRenderWindow* window, sfSprite* background) {
-    sfRenderWindow_drawSprite(window, background, NULL);
+void draw_background(sfRenderWindow* window, sfSprite* current_background, sfSprite* next_background, float transition_timer) {
+    if (transition_timer < TRANSITION_DURATION) {
+        // Crossfade : l'image actuelle diminue, la suivante augmente
+        float alpha = transition_timer / TRANSITION_DURATION; // Va de 0 à 1
+        sfSprite_setColor(current_background, sfColor_fromRGBA(255, 255, 255, (sfUint8)(255 * (1.0f - alpha))));
+        sfSprite_setColor(next_background, sfColor_fromRGBA(255, 255, 255, (sfUint8)(255 * alpha)));
+        sfRenderWindow_drawSprite(window, current_background, NULL);
+        sfRenderWindow_drawSprite(window, next_background, NULL);
+    }
+    else {
+        // Pas de transition, afficher l'image actuelle
+        sfSprite_setColor(current_background, sfColor_fromRGBA(255, 255, 255, 255));
+        sfRenderWindow_drawSprite(window, current_background, NULL);
+    }
 }
 
 void draw_ground(sfRenderWindow* window, sfSprite* ground) {
@@ -70,7 +82,9 @@ void draw_game_over(sfRenderWindow* window, sfText* text, int score) {
 }
 
 void cleanup_render(Game* game) {
-    sfSprite_destroy(game->background);
+    for (int i = 0; i < NUM_BACKGROUNDS; i++) {
+        sfSprite_destroy(game->backgrounds[i]);
+    }
     sfSprite_destroy(game->ground);
     sfText_destroy(game->score_text);
     sfFont_destroy(game->font);
@@ -79,6 +93,11 @@ void cleanup_render(Game* game) {
         sfSprite_destroy(game->pipes[i].top_sprite);
         sfSprite_destroy(game->pipes[i].bottom_sprite);
     }
+    sfMusic_destroy(game->background_music);
+    sfSound_destroy(game->jump_sound);
+    sfSound_destroy(game->crash_sound);
+    sfSoundBuffer_destroy(game->jump_buffer);
+    sfSoundBuffer_destroy(game->crash_buffer);
     free(game->player);
     free(game->pipes);
 }

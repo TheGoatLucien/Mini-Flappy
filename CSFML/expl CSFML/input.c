@@ -10,6 +10,7 @@ void handle_input(sfRenderWindow* window, Game* game, sfBool* jump) {
         if (event.type == sfEvtKeyPressed) {
             if (event.key.code == sfKeySpace) {
                 *jump = sfTrue;
+                sfSound_play(game->jump_sound); // Jouer le son de saut
             }
         }
     }
