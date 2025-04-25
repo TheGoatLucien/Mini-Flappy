@@ -21,34 +21,50 @@ void draw_score(sfRenderWindow* window, sfText* score_text, int score) {
     sfRenderWindow_drawText(window, score_text, NULL);
 }
 
-void draw_menu(sfRenderWindow* window, sfText* text, sfSprite* bird_sprite, int selected_bird) {
-    // Instructions pour sélectionner l'oiseau
-    sfText_setString(text, "Select your bird (Up/Down)\nPress ENTER to start");
-    sfText_setCharacterSize(text, 30);
-    sfText_setPosition(text, (sfVector2f) { WINDOW_WIDTH / 2 - 150, WINDOW_HEIGHT / 2 - 150 });
-    sfText_setColor(text, sfBlack);
-    sfRenderWindow_drawText(window, text, NULL);
+void draw_menu(sfRenderWindow* window, sfText* text, sfSprite* bird_sprite, int selected_bird, MenuSubState menu_substate, int* high_scores) {
+    if (menu_substate == MENU_BIRD_SELECTION) {
+        sfText_setString(text, "Select your bird (Up/Down)\nPress ENTER to start\nPress S to view high scores");
+        sfText_setCharacterSize(text, 30);
+        sfText_setPosition(text, (sfVector2f) { WINDOW_WIDTH / 2 - 150, WINDOW_HEIGHT / 2 - 150 });
+        sfText_setColor(text, sfBlack);
+        sfRenderWindow_drawText(window, text, NULL);
 
-    // Afficher les 7 oiseaux en colonne
-    for (int i = 0; i < 7; i++) {
-        sfSprite_setTextureRect(bird_sprite, (sfIntRect) { 0, i * 16, 16, 15 });
-        sfSprite_setPosition(bird_sprite, (sfVector2f) { WINDOW_WIDTH / 2 - 20, WINDOW_HEIGHT / 2 - 50 + i * 30 });
-        if (i == selected_bird) {
-            sfSprite_setColor(bird_sprite, sfColor_fromRGB(255, 255, 0)); // Surligner l'oiseau sélectionné
+        for (int i = 0; i < 7; i++) {
+            sfSprite_setTextureRect(bird_sprite, (sfIntRect) { 0, i * 16, 16, 15 });
+            sfSprite_setPosition(bird_sprite, (sfVector2f) { WINDOW_WIDTH / 2 - 20, WINDOW_HEIGHT / 2 - 50 + i * 30 });
+            if (i == selected_bird) {
+                sfSprite_setColor(bird_sprite, sfColor_fromRGB(255, 255, 0));
+            }
+            else {
+                sfSprite_setColor(bird_sprite, sfWhite);
+            }
+            sfRenderWindow_drawSprite(window, bird_sprite, NULL);
         }
-        else {
-            sfSprite_setColor(bird_sprite, sfWhite);
-        }
-        sfRenderWindow_drawSprite(window, bird_sprite, NULL);
+    }
+    else if (menu_substate == MENU_HIGH_SCORES) {
+        draw_high_scores(window, text, high_scores);
     }
 }
 
+void draw_high_scores(sfRenderWindow* window, sfText* text, int* high_scores) {
+    char high_scores_str[256];
+    snprintf(high_scores_str, sizeof(high_scores_str),
+        "High Scores\n1. %d\n2. %d\n3. %d\n4. %d\n5. %d\n6. %d\n7. %d\nPress S or ESC to return",
+        high_scores[0], high_scores[1], high_scores[2], high_scores[3],
+        high_scores[4], high_scores[5], high_scores[6]);
+    sfText_setString(text, high_scores_str);
+    sfText_setCharacterSize(text, 30);
+    sfText_setPosition(text, (sfVector2f) { WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT / 2 - 150 });
+    sfText_setColor(text, sfBlack);
+    sfRenderWindow_drawText(window, text, NULL);
+}
+
 void draw_game_over(sfRenderWindow* window, sfText* text, int score) {
-    char game_over_str[64];
-    snprintf(game_over_str, sizeof(game_over_str), "Game Over! Score: %d\nPress ENTER to restart", score);
+    char game_over_str[128];
+    snprintf(game_over_str, sizeof(game_over_str), "Game Over! Score: %d\nPress ENTER to restart\nPress ESC to return to menu", score);
     sfText_setString(text, game_over_str);
     sfText_setCharacterSize(text, 40);
-    sfText_setPosition(text, (sfVector2f) { WINDOW_WIDTH / 2 - 200, WINDOW_HEIGHT / 2 - 40 });
+    sfText_setPosition(text, (sfVector2f) { WINDOW_WIDTH / 2 - 250, WINDOW_HEIGHT / 2 - 60 });
     sfText_setColor(text, sfBlack);
     sfRenderWindow_drawText(window, text, NULL);
 }

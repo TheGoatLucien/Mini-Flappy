@@ -2,13 +2,14 @@
 #include "player.h"
 #include "pipes.h"
 #include "render.h"
+#include "score.h"
 #include <stdlib.h>
 
 void init_game(Game* game, sfRenderWindow* window) {
     game->player = (Player*)malloc(sizeof(Player));
     if (!game->player) exit(1);
 
-    sfTexture* player_texture = sfTexture_createFromFile("../Ressources/Textures/AllBird1.png", NULL);
+    sfTexture* player_texture = sfTexture_createFromFile("../Ressources/Textures/ALLBird1.png", NULL);
     sfTexture* pipe_texture = sfTexture_createFromFile("../Ressources/Textures/Pipe.png", NULL);
     sfTexture* bg_texture = sfTexture_createFromFile("../Ressources/Textures/Background5.png", NULL);
     sfTexture* ground_texture = sfTexture_createFromFile("../Ressources/Textures/ground.png", NULL);
@@ -36,9 +37,13 @@ void init_game(Game* game, sfRenderWindow* window) {
     sfText_setPosition(game->score_text, (sfVector2f) { WINDOW_WIDTH / 2, 50 });
     sfText_setColor(game->score_text, sfBlack);
 
+    // Charger les meilleurs scores
+    load_high_scores(game->high_scores);
+
     game->state = MENU;
+    game->menu_substate = MENU_BIRD_SELECTION;
     game->score = 0;
-    game->pipe_speed = PIPE_SPEED; // Vitesse initiale
+    game->pipe_speed = PIPE_SPEED;
 }
 
 void update_game(Game* game, float delta_time, sfBool jump) {
@@ -46,7 +51,6 @@ void update_game(Game* game, float delta_time, sfBool jump) {
 
     update_player(game->player, delta_time, jump);
 
-    // Ajuster la vitesse des tuyaux en fonction du score
     game->pipe_speed = PIPE_SPEED + (game->score / SCORE_SPEED_THRESHOLD) * PIPE_SPEED_INCREMENT;
     if (game->pipe_speed > PIPE_SPEED_MAX) {
         game->pipe_speed = PIPE_SPEED_MAX;
@@ -55,6 +59,8 @@ void update_game(Game* game, float delta_time, sfBool jump) {
     update_pipes(game->pipes, game->pipe_count, delta_time, game->player, &game->score, &game->pipe_speed);
 
     if (check_collisions(game->player, game->pipes, game->pipe_count)) {
+        // Mettre à jour les meilleurs scores avant de passer à GAME_OVER
+        update_high_scores(game->high_scores, game->score);
         game->state = GAME_OVER;
     }
 
@@ -67,6 +73,6 @@ void reset_game(Game* game) {
     reset_player(game->player);
     reset_pipes(game->pipes, game->pipe_count);
     game->score = 0;
-    game->pipe_speed = PIPE_SPEED; // Réinitialiser la vitesse
+    game->pipe_speed = PIPE_SPEED;
     game->state = PLAYING;
 }

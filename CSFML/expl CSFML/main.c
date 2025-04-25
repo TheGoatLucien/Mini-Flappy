@@ -19,20 +19,21 @@ int main() {
     sfText_setFont(menu_text, game.font);
 
     sfSprite* bird_sprite = sfSprite_create();
-    sfTexture* bird_texture = sfTexture_createFromFile("../Ressources/Textures/AllBird1.png", NULL);
+    sfTexture* bird_texture = sfTexture_createFromFile("../Ressources/Textures/ALLBird1.png", NULL);
     sfSprite_setTexture(bird_sprite, bird_texture, sfTrue);
     sfSprite_setScale(bird_sprite, (sfVector2f) { 2.5f, 2.5f });
 
     sfClock* clock = sfClock_create();
     sfBool jump = sfFalse;
-    int selected_bird = 0; // Oiseau sélectionné dans le menu
+    sfBool return_to_menu = sfFalse;
+    int selected_bird = 0;
 
     while (sfRenderWindow_isOpen(window)) {
         float delta_time = sfTime_asSeconds(sfClock_restart(clock));
 
         switch (game.state) {
         case MENU:
-            handle_menu_input(window, &game, &selected_bird);
+            handle_menu_input(window, &game, &selected_bird, &game.menu_substate);
             break;
         case PLAYING:
             jump = sfFalse;
@@ -40,7 +41,13 @@ int main() {
             update_game(&game, delta_time, jump);
             break;
         case GAME_OVER:
-            handle_game_over_input(window, &game);
+            return_to_menu = sfFalse;
+            handle_game_over_input(window, &game, &return_to_menu);
+            if (return_to_menu) {
+                reset_game(&game);
+                game.state = MENU;
+                game.menu_substate = MENU_BIRD_SELECTION;
+            }
             break;
         }
 
@@ -55,7 +62,7 @@ int main() {
         draw_ground(window, game.ground);
 
         if (game.state == MENU) {
-            draw_menu(window, menu_text, bird_sprite, selected_bird);
+            draw_menu(window, menu_text, bird_sprite, selected_bird, game.menu_substate, game.high_scores);
         }
         else if (game.state == GAME_OVER) {
             draw_game_over(window, menu_text, game.score);
