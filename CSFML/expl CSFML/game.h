@@ -17,7 +17,7 @@
 #define GROUND_HEIGHT 60 // Hauteur du sol
 #define MAX_SCORES 7 // Nombre de scores à sauvegarder
 #define NUM_BACKGROUNDS 9 // Nombre d'images de fond
-#define SCORE_PER_BACKGROUND 5 // Score pour changer d'image de fond
+#define SCORE_PER_BACKGROUND 10 // Score pour changer d'image de fond
 #define TRANSITION_DURATION 1.0f // Durée de la transition entre les images de fond
 
 // États du jeu
