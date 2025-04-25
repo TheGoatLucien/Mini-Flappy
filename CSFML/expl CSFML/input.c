@@ -1,6 +1,5 @@
 #include "input.h"
 #include <SFML/Graphics.h>
-#include <stdio.h>
 
 void handle_input(sfRenderWindow* window, Game* game, sfBool* jump) {
     sfEvent event;
@@ -10,14 +9,13 @@ void handle_input(sfRenderWindow* window, Game* game, sfBool* jump) {
         }
         if (event.type == sfEvtKeyPressed) {
             if (event.key.code == sfKeySpace) {
-                *jump = sfTrue; // Signal pour le saut du joueur
-                printf("Jump triggered!\n"); // Débogage
+                *jump = sfTrue;
             }
         }
     }
 }
 
-void handle_menu_input(sfRenderWindow* window, Game* game) {
+void handle_menu_input(sfRenderWindow* window, Game* game, int* selected_bird) {
     sfEvent event;
     while (sfRenderWindow_pollEvent(window, &event)) {
         if (event.type == sfEvtClosed) {
@@ -25,7 +23,14 @@ void handle_menu_input(sfRenderWindow* window, Game* game) {
         }
         if (event.type == sfEvtKeyPressed) {
             if (event.key.code == sfKeyEnter) {
-                game->state = PLAYING; // Passer à l'état de jeu
+                game->player->selected_bird = *selected_bird;
+                game->state = PLAYING;
+            }
+            if (event.key.code == sfKeyUp) {
+                *selected_bird = (*selected_bird - 1 + 7) % 7; // Boucle entre 0 et 6
+            }
+            if (event.key.code == sfKeyDown) {
+                *selected_bird = (*selected_bird + 1) % 7;
             }
         }
     }
@@ -39,7 +44,7 @@ void handle_game_over_input(sfRenderWindow* window, Game* game) {
         }
         if (event.type == sfEvtKeyPressed) {
             if (event.key.code == sfKeyEnter) {
-                reset_game(game); // Réinitialiser pour une nouvelle partie
+                reset_game(game);
             }
         }
     }

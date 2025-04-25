@@ -1,12 +1,8 @@
 #include "render.h"
-#include "player.h"
-#include "pipes.h"
 #include <SFML/Graphics.h>
 #include <stdio.h>
 
 void init_render(Game* game) {
-    // Cette fonction est déjà gérée dans game.c pour charger les textures et sprites
-    // Ici, on peut ajouter des initialisations supplémentaires si nécessaire
     sfText_setString(game->score_text, "0");
 }
 
@@ -25,12 +21,26 @@ void draw_score(sfRenderWindow* window, sfText* score_text, int score) {
     sfRenderWindow_drawText(window, score_text, NULL);
 }
 
-void draw_menu(sfRenderWindow* window, sfText* text) {
-    sfText_setString(text, "Press ENTER to start");
-    sfText_setCharacterSize(text, 40);
-    sfText_setPosition(text, (sfVector2f) { WINDOW_WIDTH / 2 - 150, WINDOW_HEIGHT / 2 - 20 });
+void draw_menu(sfRenderWindow* window, sfText* text, sfSprite* bird_sprite, int selected_bird) {
+    // Instructions pour sélectionner l'oiseau
+    sfText_setString(text, "Select your bird (Up/Down)\nPress ENTER to start");
+    sfText_setCharacterSize(text, 30);
+    sfText_setPosition(text, (sfVector2f) { WINDOW_WIDTH / 2 - 150, WINDOW_HEIGHT / 2 - 150 });
     sfText_setColor(text, sfBlack);
     sfRenderWindow_drawText(window, text, NULL);
+
+    // Afficher les 7 oiseaux en colonne
+    for (int i = 0; i < 7; i++) {
+        sfSprite_setTextureRect(bird_sprite, (sfIntRect) { 0, i * 16, 16, 15 });
+        sfSprite_setPosition(bird_sprite, (sfVector2f) { WINDOW_WIDTH / 2 - 20, WINDOW_HEIGHT / 2 - 50 + i * 30 });
+        if (i == selected_bird) {
+            sfSprite_setColor(bird_sprite, sfColor_fromRGB(255, 255, 0)); // Surligner l'oiseau sélectionné
+        }
+        else {
+            sfSprite_setColor(bird_sprite, sfWhite);
+        }
+        sfRenderWindow_drawSprite(window, bird_sprite, NULL);
+    }
 }
 
 void draw_game_over(sfRenderWindow* window, sfText* text, int score) {
@@ -44,7 +54,6 @@ void draw_game_over(sfRenderWindow* window, sfText* text, int score) {
 }
 
 void cleanup_render(Game* game) {
-    // Libérer les ressources
     sfSprite_destroy(game->background);
     sfSprite_destroy(game->ground);
     sfText_destroy(game->score_text);

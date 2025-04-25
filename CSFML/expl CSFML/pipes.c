@@ -13,20 +13,18 @@ void init_pipes(Pipe* pipes, int count, sfTexture* texture) {
         sfSprite_setScale(pipes[i].bottom_sprite, (sfVector2f) { 1.5625f, 3.846f });
 
         pipes[i].x_position = WINDOW_WIDTH + i * PIPE_SPACING;
-        pipes[i].gap_y = (rand() % (380 - 220 + 1)) + 220; // Entre 220 et 380 pour un espace jouable
+        pipes[i].gap_y = (rand() % (380 - 220 + 1)) + 220;
 
         float pipe_height = sfTexture_getSize(texture).y * 3.846f;
 
-        // Positionner le tuyau du haut
         sfSprite_setPosition(pipes[i].top_sprite, (sfVector2f) { pipes[i].x_position, pipes[i].gap_y - PIPE_GAP / 2.0f - pipe_height });
-        // Positionner le tuyau du bas pour garantir un espace de PIPE_GAP
         sfSprite_setPosition(pipes[i].bottom_sprite, (sfVector2f) { pipes[i].x_position, pipes[i].gap_y + PIPE_GAP / 2.0f });
 
         pipes[i].passed = sfFalse;
     }
 }
 
-void update_pipes(Pipe* pipes, int count, float delta_time, Player* player, int* score) {
+void update_pipes(Pipe* pipes, int count, float delta_time, Player* player, int* score, float* pipe_speed) {
     float max_x = pipes[0].x_position;
     for (int i = 1; i < count; i++) {
         if (pipes[i].x_position > max_x) {
@@ -35,12 +33,12 @@ void update_pipes(Pipe* pipes, int count, float delta_time, Player* player, int*
     }
 
     for (int i = 0; i < count; i++) {
-        pipes[i].x_position -= PIPE_SPEED * delta_time;
+        pipes[i].x_position -= *pipe_speed * delta_time;
 
         if (pipes[i].x_position < -(float)sfTexture_getSize(sfSprite_getTexture(pipes[i].top_sprite)).x) {
             pipes[i].x_position = max_x + PIPE_SPACING;
             printf("Pipe %d repositioned to: %f\n", i, pipes[i].x_position);
-            pipes[i].gap_y = (rand() % (380 - 220 + 1)) + 220; // Entre 220 et 380
+            pipes[i].gap_y = (rand() % (380 - 220 + 1)) + 220;
             pipes[i].passed = sfFalse;
             max_x = pipes[i].x_position;
         }
@@ -67,7 +65,7 @@ void draw_pipes(sfRenderWindow* window, Pipe* pipes, int count) {
 void reset_pipes(Pipe* pipes, int count) {
     for (int i = 0; i < count; i++) {
         pipes[i].x_position = WINDOW_WIDTH + i * PIPE_SPACING;
-        pipes[i].gap_y = (rand() % (380 - 220 + 1)) + 220; // Entre 220 et 380
+        pipes[i].gap_y = (rand() % (380 - 220 + 1)) + 220;
         pipes[i].passed = sfFalse;
 
         float pipe_height = sfTexture_getSize(sfSprite_getTexture(pipes[i].top_sprite)).y * 3.846f;
