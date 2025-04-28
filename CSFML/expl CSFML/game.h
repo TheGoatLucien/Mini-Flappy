@@ -10,8 +10,8 @@
 #define JUMP_VELOCITY -300.0f // Vitesse de saut
 #define PIPE_SPEED 180.0f // Vitesse initiale des tuyaux
 #define PIPE_SPEED_INCREMENT 5.0f // Incrément de vitesse par score
-#define PIPE_SPEED_MAX 1000.0f // Vitesse maximale des tuyaux
-#define SCORE_SPEED_THRESHOLD 5 // Seuil de score pour augmenter la vitesse des tuyaux
+#define PIPE_SPEED_MAX 2000.0f // Vitesse maximale des tuyaux
+#define SCORE_SPEED_THRESHOLD 1 // Seuil de score pour augmenter la vitesse des tuyaux
 #define PIPE_SPACING 300 // Espacement entre les tuyaux
 #define PIPE_GAP 170 // Espace entre les tuyaux
 #define GROUND_HEIGHT 60 // Hauteur du sol
