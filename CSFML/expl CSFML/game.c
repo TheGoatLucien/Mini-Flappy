@@ -105,7 +105,7 @@ void update_game(Game* game, float delta_time, sfBool jump) {
     update_player(game->player, delta_time, jump);
 
     game->pipe_speed = PIPE_SPEED + (game->score / SCORE_SPEED_THRESHOLD) * PIPE_SPEED_INCREMENT;
-	printf("Pipe speed: %f\n", game->pipe_speed); // Debug
+	//printf("Pipe speed: %f\n", game->pipe_speed); // Debug
     if (game->pipe_speed > PIPE_SPEED_MAX) {
         game->pipe_speed = PIPE_SPEED_MAX;
     }
